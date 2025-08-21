@@ -5,7 +5,7 @@
 
 void task_A(void *param)
 {
-    while(1) {
+    while (1) {
         ESP_LOGI("main", "ciallo~");
         vTaskDelay(pdMS_TO_TICKS(500));
     }

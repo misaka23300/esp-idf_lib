@@ -57,8 +57,7 @@ extern "C" {
 /**
  * Device descriptor
  */
-typedef struct
-{
+typedef struct {
     gpio_num_t ce_pin;     //!< GPIO pin connected to CE
     gpio_num_t io_pin;     //!< GPIO pin connected to chip I/O
     gpio_num_t sclk_pin;   //!< GPIO pin connected to SCLK

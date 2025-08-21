@@ -15,7 +15,7 @@
 
 static const char * const features[] = {
 #if defined(MBEDTLS_VERSION_FEATURES)
-    #if defined(MBEDTLS_HAVE_ASM)
+#if defined(MBEDTLS_HAVE_ASM)
     "HAVE_ASM", //no-check-names
 #endif /* MBEDTLS_HAVE_ASM */
 #if defined(MBEDTLS_NO_UDBL_DIVISION)

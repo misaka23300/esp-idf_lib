@@ -11,7 +11,7 @@ void taskA();
 void app_main()
 {
     ESP_LOGI("main", "esp32 s3 start");
-    xTaskCreatePinnedToCore(taskA, "dht11",  2048*2, NULL, 1, NULL, 1);
+    xTaskCreatePinnedToCore(taskA, "dht11",  2048 * 2, NULL, 1, NULL, 1);
     //taskA();
 }
 
@@ -21,7 +21,7 @@ void taskA()
     int temp = 0;
     int humidity = 0;
 
-    
+
     RMT_init(DHT11_PIN);
     while (1) {
         dht11_get_data(&temp, &humidity);

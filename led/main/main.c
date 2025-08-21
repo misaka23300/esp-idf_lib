@@ -3,7 +3,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#include "driver/gpio.h" 
+#include "driver/gpio.h"
 #include "driver/ledc.h"
 
 #define LED_GPIO GPIO_NUM_2
@@ -19,19 +19,15 @@ void led_run_task()
 {
     static unsigned char gpio_level = 0;
 
-    while (1)
-    {
-        if (gpio_level)
-        {
+    while (1) {
+        if (gpio_level) {
             gpio_level = 0;
-        }
-        else
-        {
+        } else {
             gpio_level = 1;
         }
         gpio_set_level(LED_GPIO, gpio_level);
         vTaskDelay(pdMS_TO_TICKS(500));
-        
+
     }
 }
 
@@ -55,7 +51,7 @@ void app_main()
         .clk_cfg         = LEDC_AUTO_CLK,               // 定时器时钟
         .freq_hz         = 5000,                        // 频率
         .duty_resolution = LEDC_TIMER_13_BIT            // 占空比
-        
+
     };
 
     ledc_timer_config(&ledc_timer);
@@ -68,20 +64,20 @@ void app_main()
         .gpio_num   = LED_GPIO,
         .duty       = 0,
         .intr_type  = LEDC_INTR_DISABLE
-    };  
+    };
 
     ledc_channel_config(&ledc_channel);
-    
+
     ledc_fade_func_install(0);
     ledc_set_fade_with_time(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 4095, 2000);
     ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_NO_WAIT);
 
-    
+
     ledc_cbs_t cbs = {
         .fade_cb = ledc_finish_cb
     };
     ledc_cb_register(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, &cbs, NULL);
-    xTaskCreatePinnedToCore(led_run_task, "led",2048, NULL, 3, NULL, 1);
+    xTaskCreatePinnedToCore(led_run_task, "led", 2048, NULL, 3, NULL, 1);
 }
 
 

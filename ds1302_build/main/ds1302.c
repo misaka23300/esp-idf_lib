@@ -126,8 +126,7 @@ inline static esp_err_t toggle_clock(ds1302_t *dev)
 // 向DS1302写入一个字节
 static esp_err_t write_byte(ds1302_t *dev, uint8_t b)
 {
-    for (uint8_t i = 0; i < 8; i++)
-    {
+    for (uint8_t i = 0; i < 8; i++) {
         CHECK(gpio_set_level(dev->io_pin, (b >> i) & 1));
         CHECK(toggle_clock(dev));
     }
@@ -138,8 +137,7 @@ static esp_err_t write_byte(ds1302_t *dev, uint8_t b)
 static esp_err_t read_byte(ds1302_t *dev, uint8_t *b)
 {
     *b = 0;
-    for (uint8_t i = 0; i < 8; i++)
-    {
+    for (uint8_t i = 0; i < 8; i++) {
         *b |= gpio_get_level(dev->io_pin) << i;
         CHECK(toggle_clock(dev));
     }
@@ -176,8 +174,9 @@ static esp_err_t burst_read(ds1302_t *dev, uint8_t reg, uint8_t *dst, uint8_t le
     CHECK_MUX(prepare(dev, GPIO_MODE_OUTPUT));
     CHECK_MUX(write_byte(dev, reg | 0x01));
     CHECK_MUX(prepare(dev, GPIO_MODE_INPUT));
-    for (uint8_t i = 0; i < len; i++, dst++)
+    for (uint8_t i = 0; i < len; i++, dst++) {
         CHECK_MUX(read_byte(dev, dst));
+    }
     PORT_EXIT_CRITICAL;
     return chip_disable(dev);
 }
@@ -188,8 +187,9 @@ static esp_err_t burst_write(ds1302_t *dev, uint8_t reg, uint8_t *src, uint8_t l
     PORT_ENTER_CRITICAL;
     CHECK_MUX(prepare(dev, GPIO_MODE_OUTPUT));
     CHECK_MUX(write_byte(dev, reg));
-    for (uint8_t i = 0; i < len; i++, src++)
+    for (uint8_t i = 0; i < len; i++, src++) {
         CHECK_MUX(write_byte(dev, *src));
+    }
     PORT_EXIT_CRITICAL;
     return chip_disable(dev);
 }
@@ -213,9 +213,9 @@ esp_err_t ds1302_init(ds1302_t *dev)
     memset(&io_conf, 0, sizeof(gpio_config_t));
     io_conf.mode = GPIO_MODE_OUTPUT;
     io_conf.pin_bit_mask =
-            GPIO_BIT(dev->ce_pin) |
-            GPIO_BIT(dev->io_pin) |
-            GPIO_BIT(dev->sclk_pin);
+        GPIO_BIT(dev->ce_pin) |
+        GPIO_BIT(dev->io_pin) |
+        GPIO_BIT(dev->sclk_pin);
     CHECK(gpio_config(&io_conf));
 
     bool r;
@@ -279,14 +279,15 @@ esp_err_t ds1302_get_time(ds1302_t *dev, struct tm *time)
 
     time->tm_sec = bcd2dec(buf[0] & SECONDS_MASK);
     time->tm_min = bcd2dec(buf[1]);
-    if (buf[2] & HOUR12_BIT)
-    {
+    if (buf[2] & HOUR12_BIT) {
         // RTC in 12-hour mode
         time->tm_hour = bcd2dec(buf[2] & HOUR12_MASK) - 1;
-        if (buf[2] & PM_BIT)
+        if (buf[2] & PM_BIT) {
             time->tm_hour += 12;
+        }
+    } else {
+        time->tm_hour = bcd2dec(buf[2] & HOUR24_MASK);
     }
-    else time->tm_hour = bcd2dec(buf[2] & HOUR24_MASK);
     time->tm_mday = bcd2dec(buf[3]);
     time->tm_mon  = bcd2dec(buf[4]) - 1;
     time->tm_wday = bcd2dec(buf[5]) - 1;

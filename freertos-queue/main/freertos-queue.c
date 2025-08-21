@@ -16,13 +16,13 @@ void recieve_queue()
 {
     queue_data_t data;
     static int last_data = 0;
-    while(1) {
+    while (1) {
         if (xQueueReceive(queue_handle, &data, 100) == pdTRUE) {
             if (last_data != data.value) {
                 ESP_LOGI("freertos", "receive queue value: %d", data.value);
                 last_data = data.value;
             }
-            
+
         }
     }
 }
