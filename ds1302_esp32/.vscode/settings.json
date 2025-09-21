@@ -1,0 +1,10 @@
+{
+    "idf.pythonInstallPath": "/usr/bin/python3",
+    "files.associations": {
+        "condition_variable": "c",
+        "future": "c",
+        "charconv": "c",
+        "ctime": "cpp",
+        "iomanip": "cpp"
+    }
+}
