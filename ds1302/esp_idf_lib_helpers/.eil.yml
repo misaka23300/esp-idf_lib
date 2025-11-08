@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 name: esp_idf_lib_helpers
 description: Common support library for esp-idf-lib
@@ -26,3 +27,33 @@ license: ISC
 copyrights:
   - name: trombik
     year: 2019
+=======
+---
+name: esp_idf_lib_helpers
+description: Common support library for esp-idf-lib
+version: 1.2.0
+groups:
+  - common
+code_owners:
+  - trombik
+  - UncleRus
+depends:
+  - freertos
+thread_safe: n/a
+targets:
+  - esp32
+  - esp8266
+  - esp32s2
+  - esp32c3
+  - esp32s3
+  - esp32c2
+  - esp32c6
+  - esp32h2
+  - esp32p4
+  - esp32c5
+  - esp32c61
+license: ISC
+copyrights:
+  - name: trombik
+    year: 2019
+>>>>>>> 7849180c1b03f4913c600026b91ef514945c31d3

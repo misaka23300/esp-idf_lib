@@ -113,8 +113,12 @@ inline static esp_err_t toggle_clock(ds1302_t *gpio)
 inline static esp_err_t write_byte(ds1302_t *gpio, uint8_t write_data)
 {
     uint8_t i = 0;
+<<<<<<< HEAD
     for (i = 0; i < 8; i++)
     {
+=======
+    for (i = 0; i < 8; i++) {
+>>>>>>> 7849180c1b03f4913c600026b91ef514945c31d3
         ESP_ERROR_CHECK(gpio_set_level(gpio->SDA, (write_data >> i) & 0x01));
         ESP_ERROR_CHECK(toggle_clock(gpio));
     }
@@ -145,8 +149,12 @@ static esp_err_t read_byte(ds1302_t *gpio, uint8_t *read_data)
 {
     uint8_t i = 0;
     *read_data = 0;
+<<<<<<< HEAD
     for (i = 0; i < 8; i++)
     {
+=======
+    for (i = 0; i < 8; i++) {
+>>>>>>> 7849180c1b03f4913c600026b91ef514945c31d3
         *read_data = *read_data | (gpio_get_level(gpio->SDA) << i);
         ESP_ERROR_CHECK(toggle_clock(gpio));
     }
@@ -197,8 +205,12 @@ static esp_err_t burst_read(ds1302_t *gpio, uint8_t address, uint8_t *read_data,
     CHECK_MUX(write_byte(gpio, address));
     CHECK_MUX(prepare(gpio, GPIO_MODE_INPUT));
 
+<<<<<<< HEAD
     for (i = 0; i < len; i++, read_data++)
     {
+=======
+    for (i = 0; i < len; i++, read_data++) {
+>>>>>>> 7849180c1b03f4913c600026b91ef514945c31d3
         CHECK_MUX(read_byte(gpio, read_data));
     }
     PORT_EXIT_CRITICAL;
@@ -218,8 +230,12 @@ static esp_err_t burst_write(ds1302_t *gpio, uint8_t address, uint8_t *write_dat
     CHECK_MUX(prepare(gpio, GPIO_MODE_OUTPUT));
     CHECK_MUX(write_byte(gpio, address));
 
+<<<<<<< HEAD
     for (i = 0; i < len; i++, write_data++)
     {
+=======
+    for (i = 0; i < len; i++, write_data++) {
+>>>>>>> 7849180c1b03f4913c600026b91ef514945c31d3
         CHECK_MUX(write_byte(gpio, write_data[i]));
     }
 
@@ -294,6 +310,7 @@ esp_err_t ds1302_get_time(ds1302_t *gpio, struct tm *time)
     time->tm_min = bcd_to_dec(cache[1]);
 
     // 时
+<<<<<<< HEAD
     if (cache[2] & HOUR12_BIT)
     {
         time->tm_hour = bcd_to_dec(cache[2] & HOUR12_MASK) - 1;
@@ -304,6 +321,14 @@ esp_err_t ds1302_get_time(ds1302_t *gpio, struct tm *time)
     }
     else
     {
+=======
+    if (cache[2] & HOUR12_BIT) {
+        time->tm_hour = bcd_to_dec(cache[2] & HOUR12_MASK) - 1;
+        if (cache[2] & PM_BIT) {
+            time->tm_hour += 12;
+        }
+    } else {
+>>>>>>> 7849180c1b03f4913c600026b91ef514945c31d3
         time->tm_hour = bcd_to_dec(cache[2] & HOUR24_MASK);
     }
     time->tm_mday = bcd_to_dec(cache[3]);       // 天
@@ -324,6 +349,11 @@ esp_err_t ds1302_set_time(ds1302_t *gpio, const struct tm *time)
         dec_to_bcd(time->tm_mon + 1),
         dec_to_bcd(time->tm_wday + 1),
         dec_to_bcd(time->tm_year - 100),
+<<<<<<< HEAD
         0};
+=======
+        0
+    };
+>>>>>>> 7849180c1b03f4913c600026b91ef514945c31d3
     return (burst_write(gpio, CLOCK_BURST, cache, 8));
 }

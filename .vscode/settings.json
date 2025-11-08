@@ -1,3 +1,7 @@
 {
+<<<<<<< HEAD
     "idf.pythonInstallPath": "/home/laffey/.espressif/python_env/idf6.0_py3.12_env/bin/python"
+=======
+    "idf.pythonInstallPath": "C:\\Espressif\\tools\\idf-python\\3.11.2\\python.exe"
+>>>>>>> 7849180c1b03f4913c600026b91ef514945c31d3
 }

@@ -1,6 +1,10 @@
 {
   "C_Cpp.intelliSenseEngine": "default",
+<<<<<<< HEAD
   "idf.pythonInstallPath": "/usr/bin/python3",
+=======
+  "idf.pythonInstallPath": "C:\\Espressif\\tools\\idf-python\\3.11.2\\python.exe",
+>>>>>>> 7849180c1b03f4913c600026b91ef514945c31d3
   "files.associations": {
     "cstdint": "c"
   },
