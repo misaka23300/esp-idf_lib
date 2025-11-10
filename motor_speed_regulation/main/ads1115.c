@@ -14,7 +14,7 @@ i2c_master_dev_handle_t i2c_ads1115_handle = NULL;  // I2C设备句柄
 
 // ads1115一共有4个寄存器，第一个和第二个记录了读取的值，
 // 第三个和第四个用于配置芯片.
-uint8_t ads1115_registers[4] = {0, 0, 0, 0};
+//uint8_t ads1115_registers[2] = {0, 0, 0, 0};
 
 
 /**
@@ -73,21 +73,31 @@ esp_err_t ads1115_init(uint8_t ads1115_address)
 esp_err_t ads1115_config(ads1115_config_t *ads1115_config)
 {
 
-    uint8_t temp = 0;
+    /* uint8_t temp = 0;
    
     temp = temp | (ads1115_config->mode & 0x01);
-    temp = temp | (ads1115_config->fsr & 0x07) << 1; 
-    temp = temp | (ads1115_config->channel & 0x07) << 4;
+    temp = temp | ( (ads1115_config->fsr & 0x07) << 1); 
+    temp = temp | ( (ads1115_config->channel & 0x07) << 4);
     temp = temp | 0x80;
 
     ads1115_registers[2] = temp;
 
-    temp = 0x18;
-    temp = temp | (ads1115_config->speed & 0x07) << 5;
+    temp = 0x03;
+    temp = temp | ( (ads1115_config->speed & 0x07) << 5);
 
-    ads1115_registers[3] = temp;
+    ads1115_registers[3] = temp; */
 
-    return ads1115_write(0x02, ads1115_registers);
+    uint16_t temp = 0;
+    temp = 0x03;
+    temp = temp | ( (ads1115_config->speed & 0x07) << 5);
+    temp = temp | ((ads1115_config->mode & 0x01) << 8);
+    temp = temp | ((ads1115_config->fsr & 0x07) << 9);
+    temp = temp | ((ads1115_config->channel & 0x07) << 12);
+    temp = temp | (1 << 15);
+
+
+    
+    return ads1115_write(0x01, temp);
 }
 
 /**
@@ -96,13 +106,14 @@ esp_err_t ads1115_config(ads1115_config_t *ads1115_config)
  * @param write_data 要写入的数据，16位
  * @return esp_err_t I2C通信结果
  */
-esp_err_t ads1115_write(uint8_t write_address, uint8_t *write_data)
+esp_err_t ads1115_write(uint8_t write_address, uint16_t write_data)
 {
     uint8_t write_buff[3];
 
     write_buff[0] = write_address;
-    write_buff[1] = write_data[2];
-    write_buff[2] = write_data[3]; 
+   
+    write_buff[1] = (write_data >> 8) & 0xFF;  // 高字节
+    write_buff[2] = write_data & 0xFF;         // 低字节 
     
     return i2c_master_transmit(i2c_ads1115_handle, write_buff, sizeof(write_buff), -1);
 }
@@ -111,13 +122,35 @@ esp_err_t ads1115_write(uint8_t write_address, uint8_t *write_data)
 /**
  * @brief 读取ads1115电压值
  */
-esp_err_t ads1115_read(uint16_t *read_data_p)
+/* esp_err_t ads1115_read(uint16_t *read_data_p)
 {
-    uint8_t read_buff[2];
-    ESP_ERROR_CHECK(i2c_master_receive(i2c_ads1115_handle, read_buff, 2, 1));
-
-    uint8_t read_data = read_buff[0] << 8 | read_buff[1];
+    uint8_t read_buff[3];
+    read_buff[0] = 0x00;
+    //ESP_ERROR_CHECK(i2c_master_receive(i2c_ads1115_handle, read_buff, 2, -1));
+    ESP_ERROR_CHECK(i2c_master_transmit_receive(i2c_ads1115_handle, 0x00, 1, read_buff, 2, -1));
+    uint16_t read_data = read_buff[1];
+    read_data = read_data << 8 | read_buff[2];
 
     *read_data_p = read_data; 
+    return ESP_OK;
+}
+ */
+esp_err_t ads1115_read(uint16_t *read_data_p)
+{
+    uint8_t read_buff[2];   // 只需要两个字节
+
+    // 第一步：写寄存器地址 0x00
+    // 第二步：读两个字节
+    ESP_ERROR_CHECK(i2c_master_transmit_receive(
+        i2c_ads1115_handle,
+        (uint8_t[]){ 0x00 }, 1,   // 写一个字节：寄存器地址
+        read_buff, 2,            // 读取两个字节
+        -1                       // 超时
+    ));
+
+    // ADS1115 big-endian: MSB first
+    uint16_t read_data = (read_buff[0] << 8) | read_buff[1];
+
+    *read_data_p = read_data;
     return ESP_OK;
 }

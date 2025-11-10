@@ -13,7 +13,7 @@ typedef enum {
     sfr_4 = 0x01,
     sfr_2 = 0x02,
     sfr_1 = 0x03,
-} fsr_t;
+} ads1115_fsr_t;
 
 typedef enum {
     SPS_8 = 0x00,
@@ -24,15 +24,22 @@ typedef enum {
     SPS_250 = 0x05,
     SPS_475 = 0x06,
     SPS_860 = 0x07,
-} speed_t;
+} ads1115_speed_t;
+
+typedef enum {
+    ain_0 = 0x04,
+    ain_1 = 0x05,
+    ain_2 = 0x06,
+    ain_3 = 0x07
+} ads1115_channel_t;
+
 
 typedef struct {
-    uint8_t channel;    // 要读取电压的通道
-    fsr_t fsr;          // 读取的量程
+    ads1115_channel_t channel;    // 要读取电压的通道
+    ads1115_fsr_t fsr;          // 读取的量程
     uint8_t mode;       // 读取模式 0为单次读取，1为连续读取
-    speed_t speed;      // 读取速度
+    ads1115_speed_t speed;      // 读取速度
 } ads1115_config_t;
-
 
 
 
@@ -40,7 +47,7 @@ esp_err_t iic_init(gpio_num_t SCL, gpio_num_t SDA);
 
 esp_err_t ads1115_init(uint8_t ads1115_address);
 
-esp_err_t ads1115_write(uint8_t write_address, uint8_t *write_data);
+esp_err_t ads1115_write(uint8_t write_address, uint16_t write_data);
 
 esp_err_t ads1115_config(ads1115_config_t *ads1115_config);
 

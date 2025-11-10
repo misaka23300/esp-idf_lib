@@ -1,6 +1,6 @@
 {
   "C_Cpp.intelliSenseEngine": "default",
-  "idf.flashType": "JTAG",
+  "idf.flashType": "UART",
   "files.associations": {
     "stdio.h": "c",
     "assert.h": "c",
@@ -9,15 +9,17 @@
 },
   "git.ignoreLimitWarning": true,
   "idf.openOcdConfigs": [
-    "board/esp32s3-builtin.cfg"
-  ],
+    "board/esp32s3-bridge.cfg"
+],
   "idf.customExtraVars": {
     "IDF_TARGET": "esp32s3"
-  },
+},
   "clangd.path": "/opt/esp-idf/tools/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd",
   "clangd.arguments": [
     "--background-index",
     "--query-driver=/opt/esp-idf/tools/tools/xtensa-esp-elf/esp-15.1.0_20250607/xtensa-esp-elf/bin/xtensa-esp32s3-elf-gcc",
     "--compile-commands-dir=/opt/esp-idf_lib/motor_speed_regulation/build"
-  ]
+],
+"idf.pythonInstallPath": "C:\\Espressif\\tools\\idf-python\\3.11.2\\python.exe",
+"idf.portWin": "COM13"
 }
