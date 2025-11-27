@@ -1,2 +1,2 @@
-idf_component_register(SRCS "ads1115.c" "mian.c"
+idf_component_register(SRCS "main.c" "ads1115.c"
                     INCLUDE_DIRS "../include")
