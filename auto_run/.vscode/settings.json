@@ -1,0 +1,16 @@
+{
+  "idf.pythonInstallPath": "/usr/bin/python3",
+  "idf.openOcdConfigs": [
+    "board/esp32s3-builtin.cfg"
+  ],
+  "idf.customExtraVars": {
+    "IDF_TARGET": "esp32s3"
+  },
+  "clangd.path": "/opt/esp-idf/tools/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd",
+  "clangd.arguments": [
+    "--background-index",
+    "--query-driver=/opt/esp-idf/tools/tools/xtensa-esp-elf/esp-15.1.0_20250607/xtensa-esp-elf/bin/xtensa-esp32s3-elf-gcc",
+    "--compile-commands-dir=/opt/esp-idf_lib/auto_run/build"
+],
+"git.ignoreLimitWarning": true
+}
